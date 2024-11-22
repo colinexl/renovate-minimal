@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Group all Docker updates",
+      "groupName": "Renovate: all Docker updates",
+      "groupSlug": "all-docker",
+      "matchDatasources": ["docker"],
+      "versioning": "loose",
+      "allowedVersions": "/\\d+-\\w{40}$/"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Custom manager for MY_IMAGE_TAG updates",
+      "customType": "regex",
+      "fileMatch": ["(^|/)vars\\.json$"],
+      "matchStrings": [
+        "\"MY_IMAGE_TAG\":\\s*(?<currentValue>\\d+)(?:-(?<currentDigest>\\w{40}))?"
+      ],
+      "autoReplaceStringTemplate": "\"{{{depName}}}\": {{#if newValue}}{{{ newValue }}}{{/if}}{{#if newDigest}}-{{{ newDigest }}}{{/if}}",
+      "currentValueTemplate": "{{{ currentValue }}}{{#if currentDigest}}-{{{ currentDigest }}}{{else}}-1234567890123456789012345678901234567890{{/if}}",
+      "depNameTemplate": "MY_IMAGE_TAG",
+      "packageNameTemplate": "docker.repo.local.sfdc.net/sfci/public-cloud-start/pcs-fit-tests",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "loose"
+    }
+  ]
+}
